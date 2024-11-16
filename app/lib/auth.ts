@@ -13,4 +13,12 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET_ID as string,
     }),
   ],
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows relative callback URLs
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
+  },
 };
